@@ -6,10 +6,10 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
   data:
     redis:
       host: localhost
