@@ -1,6 +1,15 @@
 spring:
   application:
     name: remind
+  datasource:
+    url: jdbc:postgresql://localhost:5432/remind
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
   data:
     redis:
       host: localhost
