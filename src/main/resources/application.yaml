@@ -16,3 +16,8 @@ spring:
       port: 6379
   cache:
     type: redis
+
+jwt:
+  secret-key: ${JWT_KEY}
+  access-expiry-ms: 900000
+  refresh-expiry-ms: 2592000000
