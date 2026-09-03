@@ -21,9 +21,9 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-    @Value("jwt.access-expiry-ms")
+    @Value("${jwt.access-expiry-ms}")
     private int accessExpiryMs;
-    @Value("jwr.refresh-expiry-ms")
+    @Value("${jwt.refresh-expiry-ms}")
     private long refreshExpiryMs;
     @Value("${jwt.secret-key}")
     private String secretKey;
