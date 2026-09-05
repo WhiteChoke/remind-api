@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,9 +18,10 @@ import java.time.Instant;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // TODO: implement constraint exception handling, notification activation and mapping
-    @CachePut(value = "users::", key = "#id")
+    @CachePut(value = "users", key = "#result.id")
     @Transactional
     public UserCreateResponseDto createUser(UserCreateRequestDto request) {
         var createdEntity = createEntity(request);
@@ -29,7 +31,6 @@ public class UserService {
                 .build();
     }
 
-    @CachePut(value = "users::", key = "#id")
     @Transactional
     public JwtUserDetails createUserWithJwtDetails(UserCreateRequestDto request) {
         var createdEntity = createEntity(request);
@@ -38,11 +39,13 @@ public class UserService {
 
     @Transactional
     private UserEntity createEntity(UserCreateRequestDto request) {
+        var encodedPassword = passwordEncoder.encode(request.password());
+
         var entity = userRepository.save(
                 UserEntity.builder()
                         .username(request.username())
                         .email(request.email())
-                        .password(request.password())
+                        .password(encodedPassword)
                         .registeredAt(Instant.now())
                         .timezone(request.timezone())
                         .build()
