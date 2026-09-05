@@ -1,6 +1,13 @@
-package com.whitechoke.remind.security.controller;
+package com.whitechoke.remind.security.domain;
 
+import com.whitechoke.remind.security.domain.dto.RegisterRequestDto;
+import com.whitechoke.remind.security.domain.dto.RegisterResponseDto;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,5 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/auth")
 public class AuthController {
 
+    private final AuthService authService;
 
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponseDto> register(
+            @RequestBody @Valid RegisterRequestDto request,
+            HttpServletResponse httpResponse
+    ) {
+        var response = authService.register(request, httpResponse);
+
+        return ResponseEntity.ok(response);
+    }
 }

@@ -1,7 +1,9 @@
 package com.whitechoke.remind.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
+@Builder
 public record UserCreateRequestDto (
         @NotBlank(message = "Username must be not blank")
         String username,
