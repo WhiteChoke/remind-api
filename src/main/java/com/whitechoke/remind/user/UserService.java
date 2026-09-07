@@ -1,6 +1,7 @@
 package com.whitechoke.remind.user;
 
 import com.whitechoke.remind.security.JwtUserDetails;
+import com.whitechoke.remind.security.refreshToken.RefreshTokenRepository;
 import com.whitechoke.remind.user.dto.UserCreateRequestDto;
 import com.whitechoke.remind.user.dto.UserCreateResponseDto;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,7 @@ import java.time.Instant;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final CurrentUserProvider currentUserProvider;
 
@@ -62,7 +64,10 @@ public class UserService {
     @Transactional
     public Long deleteUser() {
         var id = currentUserProvider.getId();
+        refreshTokenRepository.deleteByUserId(id);
         userRepository.deleteById(id);
+
+        log.info("Deleted user with id={}", id);
 
         return id;
     }
