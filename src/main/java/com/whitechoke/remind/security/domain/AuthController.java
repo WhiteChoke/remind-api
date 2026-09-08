@@ -1,13 +1,16 @@
 package com.whitechoke.remind.security.domain;
 
+import com.whitechoke.remind.security.domain.dto.AccessTokenGetResponseDto;
 import com.whitechoke.remind.security.domain.dto.LoginRequestDto;
 import com.whitechoke.remind.security.domain.dto.LoginResponseDto;
 import com.whitechoke.remind.security.domain.dto.RegisterRequestDto;
 import com.whitechoke.remind.security.domain.dto.RegisterResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,15 @@ public class AuthController {
             HttpServletResponse httpResponse
     ) {
         var response = authService.register(request, httpResponse);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<AccessTokenGetResponseDto> getAccessToken (
+            HttpServletRequest httpRequest
+    ) {
+        var response = authService.getAccessToken(httpRequest);
 
         return ResponseEntity.ok(response);
     }
