@@ -1,6 +1,6 @@
 package com.whitechoke.remind.language;
 
-import com.whitechoke.remind.word.WordEntity;
+import com.whitechoke.remind.word.word.WordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

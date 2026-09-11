@@ -1,6 +1,6 @@
 package com.whitechoke.remind.pronunciation;
 
-import com.whitechoke.remind.word.UserWordEntity;
+import com.whitechoke.remind.word.userWord.UserWordEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;

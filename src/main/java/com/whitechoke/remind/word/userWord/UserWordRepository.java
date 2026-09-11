@@ -1,4 +1,4 @@
-package com.whitechoke.remind.word;
+package com.whitechoke.remind.word.userWord;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
