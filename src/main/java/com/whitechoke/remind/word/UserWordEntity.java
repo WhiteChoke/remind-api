@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_words")
@@ -44,7 +46,7 @@ public class UserWordEntity {
     @Column(name = "ease_factor")
     private Float easeFactor;
     @Column(name = "interval")
-    private Double interval;
+    private Integer interval;
     @Column(name = "repetitions")
     private Integer repetitions;
     @Column(name = "next_review_date")
