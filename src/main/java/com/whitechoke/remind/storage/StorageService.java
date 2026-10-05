@@ -1,9 +1,11 @@
 package com.whitechoke.remind.storage;
 
+import com.whitechoke.remind.storage.fileOutbox.FileOutboxEntity;
+import com.whitechoke.remind.storage.fileOutbox.FileOutboxRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -11,12 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -25,21 +26,23 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class StorageService {
+    private final FileOutboxRepository fileOutboxRepository;
     private final Path root = Paths.get("saved");
     private static final Pattern SAFE_EXT = Pattern.compile("[a-zA-Z0-9]{1,10}");
-
 
     @PostConstruct
     public void init() throws IOException {
         Files.createDirectory(root);
+        for (FileType fileType : FileType.values()) {
+            Files.createDirectory(Paths.get(root.toString(), fileType.toString()));
+        }
     }
 
-    public <T extends Storable> T save(
+    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    public Path save(
             MultipartFile file,
-            Supplier<T> factory,
-            JpaRepository<T, ?> repository,
             FileType type
-    ) throws IOException {
+    ) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
@@ -54,25 +57,57 @@ public class StorageService {
 
         try (InputStream in = file.getInputStream()) {
             Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-        }
+            fileOutboxRepository.save(
+                FileOutboxEntity.builder()
+                        .filePath(target.toString())
+                        .createdAt(Instant.now())
+                        .build()
+            );
+        } catch (IOException e) {
+            log.error("Failed to save file: {}", e.getMessage());
 
-        try {
-            var entity = factory.get();
-            entity.setPath(type.name() + "/" + filename);
-            return repository.save(entity);
-        } catch (RuntimeException e) {
             try {
                 Files.deleteIfExists(target);
             } catch (IOException ex) {
+            // may be bad files
                 e.addSuppressed(ex);
             }
-            throw e;
+
+            throw new RuntimeException(e);
         }
 
+        return target;
+    }
+
+    @Transactional
+    public <T extends Storable> T saveToDb(
+            Path path,
+            JpaRepository<T, ?> repository,
+            Supplier<T> factory
+    ) {
+        var entity = factory.get();
+        entity.setPath(path.toString());
+
+        return repository.save(entity);
     }
 
     private String extensionOf(MultipartFile file) {
         var ext = StringUtils.getFilenameExtension(file.getOriginalFilename());
         return ext != null && SAFE_EXT.matcher(ext).matches() ? "." + ext.toLowerCase() : "";
+    }
+
+    public boolean deleteFile(Path path) {
+        if (!Files.exists(path)) {
+            return true;
+        }
+
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            log.error("Failed to delete file: {}", e.getMessage());
+            return false;
+        }
+
+        return true;
     }
 }
