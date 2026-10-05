@@ -39,7 +39,7 @@ public class StorageService {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public Path save(
+    public StorageFile save(
             MultipartFile file,
             FileType type
     ) {
@@ -55,9 +55,11 @@ public class StorageService {
             throw new SecurityException("Invalid target path");
         }
 
+        FileOutboxEntity created;
+
         try (InputStream in = file.getInputStream()) {
             Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-            fileOutboxRepository.save(
+            created = fileOutboxRepository.save(
                 FileOutboxEntity.builder()
                         .filePath(target.toString())
                         .createdAt(Instant.now())
@@ -72,11 +74,13 @@ public class StorageService {
             // may be bad files
                 e.addSuppressed(ex);
             }
-
             throw new RuntimeException(e);
         }
 
-        return target;
+        return StorageFile.builder()
+                .id(created.getId())
+                .path(target)
+                .build();
     }
 
     @Transactional
