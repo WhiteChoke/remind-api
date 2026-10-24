@@ -11,4 +11,5 @@ public interface LanguageRepository extends JpaRepository<LanguageEntity, Long> 
     @Query("select l from LanguageEntity l where l.languageCode = :code")
     @EntityGraph(value = "language_with_words", type = EntityGraph.EntityGraphType.LOAD)
     Optional<LanguageEntity> findLanguageWithWords(@Param("code") String code);
+    Optional<LanguageEntity> findByLanguageCode(String code);
 }

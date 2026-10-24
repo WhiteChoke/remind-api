@@ -1,7 +1,7 @@
 package com.whitechoke.remind.word.word;
 
 import com.whitechoke.remind.language.LanguageEntity;
-import com.whitechoke.remind.pronunciation.PronunciationWordEntity;
+import com.whitechoke.remind.pronunciation.pronunciationWord.PronunciationWordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,7 +38,7 @@ public class WordEntity {
     @Column(name = "translation", nullable = false)
     private String translation;
     @OneToOne
-    @JoinColumn(name = "pronunciation_id", nullable = false)
+    @JoinColumn(name = "pronunciation_id")
     private PronunciationWordEntity pronunciation;
     @ManyToOne
     @JoinColumn(name = "language_id", nullable = false)

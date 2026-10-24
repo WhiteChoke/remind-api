@@ -1,6 +1,7 @@
 package com.whitechoke.remind.word.userWord;
 
-import com.whitechoke.remind.pronunciation.LocalPronunciationEntity;
+import com.whitechoke.remind.image.ImageEntity;
+import com.whitechoke.remind.pronunciation.localPronunciation.LocalPronunciationEntity;
 import com.whitechoke.remind.user.UserEntity;
 import com.whitechoke.remind.word.word.WordEntity;
 import com.whitechoke.remind.word.WordState;
@@ -47,20 +48,25 @@ public class UserWordEntity {
     @OneToOne
     @JoinColumn(name = "word_id")
     private WordEntity word;
-    @Column(name = "translation", nullable = false)
-    private String translation;
     @Column(name = "sentence")
     private String sentence;
-    @Column(name = "image_path")
-    private String imagePath;
+    @Column(name = "transcription")
+    private String transcription;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private ImageEntity image;
+    @Builder.Default
     @Column(name = "ease_factor")
     private Float easeFactor = 2.5f;
+    @Builder.Default
     @Column(name = "interval")
     private Integer interval = 0;
+    @Builder.Default
     @Column(name = "repetitions")
     private Integer repetitions = 0;
     @Column(name = "next_review_date")
     private Instant nextReviewDate;
+    @Builder.Default
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
     private WordState state = WordState.UNDER_STUDY;

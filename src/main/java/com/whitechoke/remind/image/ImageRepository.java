@@ -1,4 +1,6 @@
 package com.whitechoke.remind.image;
 
-public interface ImageRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
 }

@@ -32,9 +32,12 @@ public class StorageService {
 
     @PostConstruct
     public void init() throws IOException {
-        Files.createDirectory(root);
+        if (Files.notExists(root))
+            Files.createDirectory(root);
         for (FileType fileType : FileType.values()) {
-            Files.createDirectory(Paths.get(root.toString(), fileType.toString()));
+            var path = Paths.get(root.toString(), fileType.toString());
+            if (Files.notExists(path))
+                Files.createDirectory(path);
         }
     }
 

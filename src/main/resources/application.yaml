@@ -16,6 +16,9 @@ spring:
       port: 6379
   cache:
     type: redis
+#  threads:
+#    virtual:
+#      enabled: true
 
 jwt:
   secret-key: ${JWT_KEY}
