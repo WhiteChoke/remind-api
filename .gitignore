@@ -5,6 +5,15 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### python ###
+
+tests
+data
+.env
+.venv
+.pytest_cache
+__pycache__
+
 ### STS ###
 .apt_generated
 .classpath
