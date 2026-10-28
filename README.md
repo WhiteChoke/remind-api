@@ -51,7 +51,6 @@ in src\main\python, you should create an .env file
 
 ```text
 python/
-├── README.md
 ├── db/
 ├── endpoints/
 ├── llm/
