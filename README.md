@@ -58,8 +58,7 @@ python/
 ├── service/
 ├── main.exe
 ├── main.py
-├── requirements.txt
-└── LICENSE
+└── requirements.txt
 ```
 
 ## Contributing
