@@ -47,7 +47,7 @@ in src\main\python, you should create an .env file
 | `DB_PORT` | db port | `Any` |
 | `USER` | user | `postgres / etc.` |
 
-## Project Structure
+## Directory Structure
 
 ```text
 python/
