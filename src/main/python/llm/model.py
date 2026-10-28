@@ -1,6 +1,7 @@
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 
+# ONLY CHANGE IT IF YOU KNOW THE SHIT
 system_template = f"""Generate exactly one short sentence using the user's input.
 
                         Rules:
@@ -26,13 +27,31 @@ system_template = f"""Generate exactly one short sentence using the user's input
                         Output: Ты умеешь готовить вкусные блюда дома. 
                    """
 
-async def generate(message: str):
+async def generate(message: str) -> str:
+
+    """
+    Choose between those models, depends on whatever you need:
+
+    CPU only / Low VRAM:
+        qwen3.5:2b
+        qwen2.5:3b-instruct
+        qwen3:1.7b
+
+    6GB VRAM:
+        gemma3:4b ( includes 140+ languages )
+        qwen3.5:4b 
+        yi:6b-chat-v1.5-q4_K_M ( might not work well on all the languages )
+
+    Generate function itself, unironically generates the LLM response the user will recieve.\n
+    I had listed some of the models to choose from, but if you'd like to experiment with your own, then allright.
+    """
     
     prompt = ChatPromptTemplate([
         ("system", system_template),
         ("user", "{user_message}")
     ])
 
+    # Replace the "model" arg to switch it
     llm = ChatOllama(model="R4C3R/qwen2.5-7b-instruct-heretic:q4_k_m",
                      temperature=0.2)
 

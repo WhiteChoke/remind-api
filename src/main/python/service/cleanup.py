@@ -13,6 +13,14 @@ async def timer(time: int) -> None:
         await asyncio.sleep(1)
 
 async def cleanup_service() -> None:
+    """
+    The function iterates over all the files in a directory, once every 1800 seconds ( 30 minutes )\n
+    and then validates, either the file is no more database related or still exists.\n
+    1st case: 
+        It will delete the file from ./data folder.
+    2nd case: 
+        It will leave the file untouched.
+    """
     try:
         for file in folder.iterdir():
             if file.is_file():
@@ -21,8 +29,6 @@ async def cleanup_service() -> None:
                     extracted = text[0].split(":")[1].replace(" ", "")
                     
                     async with localSession() as db:
-                        filename = file.stem
-                        print(f"pair 1: {filename}")
                         stmt = (
                             select(Cards).
                             where(Cards.card_file_name == extracted)

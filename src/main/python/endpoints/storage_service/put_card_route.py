@@ -4,7 +4,7 @@ from typing import Annotated
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 
 from fastapi import (APIRouter,
                      UploadFile,

@@ -6,8 +6,6 @@ from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi import (APIRouter,
-                     UploadFile,
-                     File,
                      Form,
                      Depends)
 
@@ -50,8 +48,10 @@ async def update_card_id(id: Annotated[int, Form()],
                 new_path = DATA_DIR / f"file{new_id}"
                 #SAVE
                 text = old_path.read_text(encoding="utf-8").splitlines()
-                #WE DONT NEED YOU ANYMORE
+                #DELETE
                 old_path.unlink()
+
+                # Somehow we've got LSD from those action words....
 
                 file_info: str = "\n".join(text)
                 new_path.write_text(file_info)
