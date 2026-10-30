@@ -39,6 +39,7 @@ async def cleanup_service() -> None:
                     file.unlink()
                     continue
     except Exception:
+        # прост)
         pass
 
     await timer(1800)
