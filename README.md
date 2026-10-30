@@ -47,19 +47,17 @@ in src\main\python, you should create an .env file
 | `DB_PORT` | db port | `Any` |
 | `USER` | user | `postgres / etc.` |
 
-## Project Structure
+## Directory Structure
 
 ```text
 python/
-├── README.md
 ├── db/
 ├── endpoints/
 ├── llm/
 ├── service/
 ├── main.exe
 ├── main.py
-├── requirements.txt
-└── LICENSE
+└── requirements.txt
 ```
 
 ## Contributing
